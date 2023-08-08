@@ -10,7 +10,7 @@ class SupervisorProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->commands([
-                FlamixCommands\sendMessageWhenLicanseExpired::class,
+                //FlamixCommands\sendMessageWhenLicanseExpired::class,
             ]);
         }
     }
