@@ -57,7 +57,7 @@ class Supervisor extends Command
      */
     private function getManuallyCmd(string $cmd): string
     {
-        return 'php ' . base_path('artisan') . ' ' . $cmd;
+        return 'php ' . base_path('artisan') . " {$cmd}  > /dev/null 2>&1 &"; //  > /dev/null 2>&1 & - run in background
     }
 
     /**
