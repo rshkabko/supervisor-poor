@@ -57,7 +57,7 @@ class Supervisor extends Command
      */
     private function getManuallyCmd(string $cmd): string
     {
-        return 'php ' . base_path('artisan') . " {$cmd} > /dev/null 2>&1 &"; //  > /dev/null 2>&1 & - run in background
+        return 'php ' . base_path('artisan') . ' ' . $cmd;
     }
 
     /**
@@ -69,7 +69,7 @@ class Supervisor extends Command
     private function artisanRunManually(string $cmd): ?string
     {
         $this->log('Force run command: ' . $this->getManuallyCmd($cmd));
-        return shell_exec($this->getManuallyCmd($cmd)); // Through Process, the standard timeout is triggered
+        return shell_exec($this->getManuallyCmd($cmd) . ' > /dev/null 2>&1 &');  // > /dev/null 2>&1 & - run in background
     }
 
     /**
