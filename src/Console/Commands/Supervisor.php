@@ -64,9 +64,9 @@ class Supervisor extends Command
      * Run artisan command.
      *
      * @param string $cmd
-     * @return string
+     * @return null|string
      */
-    private function artisanRunManually(string $cmd): string
+    private function artisanRunManually(string $cmd): ?string
     {
         $this->log('Force run command: ' . $this->getManuallyCmd($cmd));
         return shell_exec($this->getManuallyCmd($cmd)); // Through Process, the standard timeout is triggered
