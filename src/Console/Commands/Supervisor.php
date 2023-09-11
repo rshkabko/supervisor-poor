@@ -51,8 +51,12 @@ class Supervisor extends Command
      */
     private function log(string $msg, array $arg = [])
     {
-//        info($msg, $arg); // Debug in console
-        dump($msg, $arg);
+        // info($msg, $arg); // Debug in console
+        if (!empty($arg)) {
+            dump($msg, $arg);
+        } else {
+            dump($msg);
+        }
     }
 
     /**
