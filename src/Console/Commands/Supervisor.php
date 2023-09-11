@@ -68,8 +68,9 @@ class Supervisor extends Command
      */
     private function artisanRunManually(string $cmd): ?string
     {
-        $this->log('Force run command: ' . $this->getManuallyCmd($cmd));
-        return shell_exec($this->getManuallyCmd($cmd) . ' > /dev/null 2>&1 &');  // > /dev/null 2>&1 & - run in background
+        $full_cmd = $this->getManuallyCmd($cmd) . ' > /dev/null 2>&1 &'; // > /dev/null 2>&1 & - run in background
+        $this->log("Force run command: {$full_cmd}");
+        return shell_exec($full_cmd);
     }
 
     /**
