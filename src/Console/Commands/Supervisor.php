@@ -7,10 +7,11 @@ use Symfony\Component\Process\Process;
 
 /**
  * php artisan flamix:supervisor
+ * php artisan flamix:supervisor --count
  */
 class Supervisor extends Command
 {
-    protected $signature = 'flamix:supervisor';
+    protected $signature = 'flamix:supervisor {--count}';
     protected $description = 'Check if command running and if not - start!';
 
     public function __construct()
@@ -20,6 +21,7 @@ class Supervisor extends Command
 
     public function handle()
     {
+        $show_count = $this->option('count');
         $commands = config('queue.supervisor', []);
 
         if (empty($commands)) {
@@ -27,6 +29,13 @@ class Supervisor extends Command
         }
 
         foreach ($commands as $cmd => $count) {
+            // Counting...
+            if ($show_count) {
+                $this->log("Command: {$cmd}. Count: {$this->howMatchRunManually($cmd, false)}, needed: {$count}");
+                continue;
+            }
+
+            // Running...
             if ($this->howMatchRunManually($cmd) < $count) {
                 $this->artisanRunManually($cmd);
             }
@@ -77,22 +86,25 @@ class Supervisor extends Command
      * How many times launched?
      *
      * @param string $cmd
+     * @param bool $log
      * @return int
      */
-    private function howMatchRunManually(string $cmd): int
+    private function howMatchRunManually(string $cmd, bool $log = true): int
     {
         $manually_cmd = $this->getManuallyCmd($cmd);
         $running = $this->runProcess('ps aux | grep "' . $cmd . '"');
         $arRunning = explode("\n", $running);
 
-        // How many times we faund?
+        // How many times we found?
         for ($i = $cmd_count = 0; count($arRunning) > $i; $i++) {
             if (str_contains($arRunning[$i], $manually_cmd)) {
                 $cmd_count++;
             }
         }
 
-        $this->log('[New] Is running ' . $manually_cmd . ': ' . $cmd_count, $arRunning);
+        if ($log) {
+            $this->log("[New] Is running {$manually_cmd}: {$cmd_count}", $arRunning);
+        }
 
         return $cmd_count;
     }
