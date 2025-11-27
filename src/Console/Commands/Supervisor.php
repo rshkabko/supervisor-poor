@@ -36,8 +36,11 @@ class Supervisor extends Command
             }
 
             // Running...
-            if ($this->howMatchRunManually($cmd) < $count) {
-                $this->artisanRunManually($cmd);
+            $current_count = $this->howMatchRunManually($cmd);
+            if ($current_count < $count) {
+                for ($i = $current_count; $i < $count; $i++) {
+                    $this->artisanRunManually($cmd);
+                }
             }
         }
     }
